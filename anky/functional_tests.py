@@ -24,7 +24,7 @@ class NewVisitorTest(unittest.TestCase):
         self.browser.get('http://localhost:8000')
 
         # Видим, что заголовок и шапка страницы говорят о списке вопросов для запоминания и ответов
-        self.assertIn('Anky', self.browser.title)
+        self.assertIn('Список вопросов для запоминания', self.browser.title)
         self.fail('Закончить тест')
 
         # Нам предлагается сразу ввести первый вопрос
