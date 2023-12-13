@@ -1,11 +1,65 @@
 from selenium import webdriver
+import unittest
 from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.chrome.options import Options as ChromeOptions
 from webdriver_manager.chrome import ChromeDriverManager
 
-options = ChromeOptions()
-service = ChromeService(executable_path=ChromeDriverManager().install())
-browser = webdriver.Chrome(service=service, options=options)
-browser.get('http://localhost:8000')
 
-assert 'Congratulations' in browser.title
+class NewVisitorTest(unittest.TestCase):
+    '''тест нового посетителя'''
+    
+    def setUp(self):
+        '''установка'''
+        options = ChromeOptions()
+        service = ChromeService(executable_path=ChromeDriverManager().install())
+        self.browser = webdriver.Chrome(service=service, options=options)
+
+    def tearDown(self):
+        '''демонтаж'''
+        self.browser.quit()
+
+    def test_can_start_a_list_and_retrieve_it_later(self):
+        '''тест: можно начать список и получить его позже'''
+        # Открываем домашнюю страницу
+        self.browser.get('http://localhost:8000')
+
+        # Видим, что заголовок и шапка страницы говорят о списке вопросов для запоминания и ответов
+        self.assertIn('Anky', self.browser.title)
+        self.fail('Закончить тест')
+
+        # Нам предлагается сразу ввести первый вопрос
+
+        # Мы вводим в текстовом поле "Вопрос: Автор теории относительности"
+
+        # Когда мы нажимаем Enter, страница обновляется и теперь страница содержит "Вопрос: Автор теории относительности. Введите ответ" с полем для ответа
+
+        # Мы вводим в поле для ответа ответ "Эйнштейн"
+
+        # Когда мы нажимаем Enter, страница обновляется и теперь страница содержит "Вопрос: Автор теории относительности. Ответ: Эйнштейн". Ниже
+        # находится кнопка подтвердить.
+
+        # Мы нажимаем кнопку, страница обновляется и появляется надпись "Запись внесена. Хотите добавить запись?" Внизу две кнопки Добавить и Далее.
+
+        # Мы нажимаем кнопку Добавить и появляется текстовое поле с предложением ввести новую запись.
+
+        # Мы вводим в текстовом поле "Дата начала 2-й мировой войны"
+
+        # Когда мы нажимаем Enter, страница обновляется и теперь страница содержит "Вопрос: Дата начала 2-й мировой войны. Введите ответ" с полем для ответа
+
+        # Мы вводим в поле для ответа ответ "1939 год"
+
+        # Когда мы нажимаем Enter, страница обновляется и теперь страница содержит "Вопрос: Дата начала 2-й мировой войны. Ответ: 1939 год". Ниже
+        # находится кнопка подтвердить.
+
+        # Мы нажимаем кнопку, страница обновляется и появляется надпись "Запись внесена. Хотите добавить запись?" Внизу две кнопки Добавить и Далее.
+
+        # Мы нажимаем кнопку Далее.
+
+        # Мы проверяем, сохранились ли наши записи
+
+        # Мы видим, что сайт сгенерировал уникальный URL-адрес - об этом выводится текст с пояснением.
+
+        # Мы посещаем эти URL-адреса - наши записи там.
+
+if __name__ == '__main__':
+    unittest.main(warnings='ignore')     

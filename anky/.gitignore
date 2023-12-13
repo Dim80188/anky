@@ -1,4 +1,4 @@
-venv/
+anky/venv
 .vscode/
 __pycache__/
 .env
