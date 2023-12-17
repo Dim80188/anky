@@ -23,8 +23,8 @@ class NewVisitorTest(unittest.TestCase):
 
     def check_for_row_in_list_talbe(self, row_text):
         '''подтверждение строки в таблице списка'''
-        table = self.browser.find_element_by_id('id_list_table')
-        rows = table.find_elements_by_tag_name('tr')
+        table = self.browser.find_element(By.ID, 'id_list_table')
+        rows = table.find_elements(By.TAG_NAME, 'tr')
         self.assertIn(row_text, [row.text for row in rows])
 
     def test_can_start_a_list_and_retrieve_it_later(self):
@@ -44,23 +44,20 @@ class NewVisitorTest(unittest.TestCase):
         inputbox.send_keys('Автор теории относительности')
         time.sleep(2)
 
-        inputbox = self.browser.find_element(By.ID, 'id_new_item_answer')
-        self.assertEqual(inputbox.get_attribute('placeholder'), 'Введите ответ')
-        time.sleep(2)
+        # inputbox = self.browser.find_element(By.ID, 'id_new_item_answer')
+        # self.assertEqual(inputbox.get_attribute('placeholder'), 'Введите ответ')
+        # time.sleep(2)
 
-        
-        # Мы вводим в поле для ответа ответ "Эйнштейн"
-        inputbox.send_keys('Эйнштейн')
+        # # Мы вводим в поле для ответа ответ "Эйнштейн"
+        # inputbox.send_keys('Эйнштейн')
 
         # Когда мы нажимаем Enter, страница обновляется и теперь 
         # страница содержит "Вопрос: Автор теории относительности. Ответ: Эйнштейн" 
         inputbox.send_keys(Keys.ENTER)
         time.sleep(3)
 
-  
-        
         self.check_for_row_in_list_talbe('Вопрос: Автор теории относительности')
-        self.check_for_row_in_list_talbe('Ответ: Эйнштейн')               
+        # self.check_for_row_in_list_talbe('Ответ: Эйнштейн')               
         self.fail('Закончить тест')
         
     

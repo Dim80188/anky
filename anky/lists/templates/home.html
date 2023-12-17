@@ -6,14 +6,16 @@
         <h1>Список вопросов для запоминания</h1>
         <form method="POST">
             <input name="item_text" id="id_new_item" placeholder="Введите вопрос" />
-            <input name="item_text_answer" id="id_new_item_answer" placeholder="Введите ответ" />
+            {% comment %} <input name="item_text_answer" id="id_new_item_answer" placeholder="Введите ответ" /> {% endcomment %}
             {% csrf_token %}
         </form>
         <table id="id_list_table">
-            <tr>
-                <td>Вопрос: {{ new_item_text }} Ответ: {{ new_item_text_answer }}</td>
-                
-            </tr>
+            {% for item in items %}
+                <tr>
+                    <td>Вопрос: {{ item.text }}</td>
+                    
+                </tr>
+            {% endfor %}
         </table>
     </body>
 </html>
