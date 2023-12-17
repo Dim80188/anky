@@ -5,4 +5,7 @@ from django.http import HttpResponse
 
 def home_page(request):
     '''домашняя страница'''
-    return HttpResponse('<html><title>Список вопросов для запоминания</title></html>')
+    return render(request, 'home.html', {
+        'new_item_text': request.POST.get('item_text', ''),
+        'new_item_answer': request.POST.get('item_text_answer', '')
+    })
