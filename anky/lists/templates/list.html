@@ -3,12 +3,19 @@
         <title>Список вопросов для запоминания</title>
     </head>
     <body>
-        <h1>Список вопросов для запоминания</h1>
-        <form method="POST" action="/lists/new">
+        <h1>Начать новый список вопросов для запоминания</h1>
+        <form method="POST", action="/lists/{{ list.id }}/add_item">
             <input name="item_text" id="id_new_item" placeholder="Введите вопрос" />
             {% comment %} <input name="item_text_answer" id="id_new_item_answer" placeholder="Введите ответ" /> {% endcomment %}
             {% csrf_token %}
         </form>
-        
+        <table id="id_list_table">
+            {% for item in list.item_set.all %}
+                <tr>
+                    <td>Вопрос: {{ item.text }}</td>
+                    
+                </tr>
+            {% endfor %}
+        </table>
     </body>
 </html>

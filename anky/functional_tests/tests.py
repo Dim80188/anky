@@ -68,14 +68,14 @@ class NewVisitorTest(LiveServerTestCase):
         inputbox.send_keys(Keys.ENTER)
        
 
-        self.wait_for_row_in_list_talbe('Вопрос: Автор теории относительности')
+        # self.wait_for_row_in_list_talbe('Вопрос: Автор теории относительности')
         # self.check_for_row_in_list_talbe('Ответ: Эйнштейн')               
         
     
         # Когда мы нажимаем Enter, страница обновляется и теперь страница содержит "Вопрос: Автор теории относительности. Ответ: Эйнштейн". Ниже
         # находится кнопка подтвердить.
         # inputbox.send_keys(Keys.ENTER)
-        # time.sleep(1)
+        # time.sleep(3)
 
         # table = self.browser.find_element(By.ID, 'id_answer_table')
         # rows = table.find_elements(By.TAG_NAME, 'tr')
@@ -96,9 +96,10 @@ class NewVisitorTest(LiveServerTestCase):
 
         # Когда мы нажимаем Enter, страница обновляется и теперь страница содержит "Вопрос: Дата начала 2-й мировой войны. Ответ: 1939 год". Ниже
         # находится кнопка подтвердить.
+        self.wait_for_row_in_list_talbe('Вопрос: Автор теории относительности')
         self.wait_for_row_in_list_talbe('Вопрос: Дата начала 2-й мировой войны')
         # Мы нажимаем кнопку, страница обновляется и появляется надпись "Запись внесена. Хотите добавить запись?" Внизу две кнопки Добавить и Далее.
-        self.fail('Закончить тест')
+        # self.fail('Закончить тест')
         # Мы нажимаем кнопку Далее.
 
         # Мы проверяем, сохранились ли наши записи
@@ -131,7 +132,7 @@ class NewVisitorTest(LiveServerTestCase):
         # 2-й пользователь посещает домашнюю страницу. На ней нет признаков списка 1-го пользователя
         self.browser.get(self.live_server_url)
         page_text = self.browser.find_element(By.TAG_NAME, 'body').text
-        self.asssertNotIn('Автор теории относительности', page_text)
+        self.assertNotIn('Автор теории относительности', page_text)
         self.assertNotIn('Дата начала 2-й мировой войны', page_text)
 
         # 2-й пользователь начинает новый список, вводя новый элемент
