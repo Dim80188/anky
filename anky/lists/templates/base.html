@@ -1,0 +1,16 @@
+<html>
+    <head>
+        <title>Список вопросов для запоминания</title>
+    </head>
+    <body>
+        <h1>{% block header_text %}{% endblock %}</h1>
+        <form method="POST" action="{% block form_action %}{% endblock %}">
+            <input name="item_text" id="id_new_item" placeholder="Введите вопрос" />
+            
+            {% comment %} <input name="item_text_answer" id="id_new_item_answer" placeholder="Введите ответ" /> {% endcomment %}
+            {% csrf_token %}
+        </form>
+        {% block table %}
+        {% endblock %}
+    </body>
+</html>

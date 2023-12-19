@@ -1,14 +1,5 @@
-<html>
-    <head>
-        <title>Список вопросов для запоминания</title>
-    </head>
-    <body>
-        <h1>Список вопросов для запоминания</h1>
-        <form method="POST" action="/lists/new">
-            <input name="item_text" id="id_new_item" placeholder="Введите вопрос" />
-            {% comment %} <input name="item_text_answer" id="id_new_item_answer" placeholder="Введите ответ" /> {% endcomment %}
-            {% csrf_token %}
-        </form>
-        
-    </body>
-</html>
+{% extends 'base.html' %}
+
+{% block header_text %}Начать новый список вопросов для запоминания{% endblock %}
+
+{% block form_action %}/lists/new{% endblock %}

@@ -47,7 +47,7 @@ class NewVisitorTest(LiveServerTestCase):
         # Видим, что заголовок и шапка страницы говорят о списке вопросов для запоминания и ответов
         self.assertIn('Список вопросов для запоминания', self.browser.title)
         header_text = self.browser.find_element(By.TAG_NAME, 'h1').text 
-        self.assertIn('Список вопросов для запоминания', header_text)
+        self.assertIn('Начать новый список вопросов для запоминания', header_text)
 
         # Нам предлагается сразу ввести первый вопрос и ответ на него
         inputbox = self.browser.find_element(By.ID, 'id_new_item')
@@ -107,6 +107,31 @@ class NewVisitorTest(LiveServerTestCase):
         # Мы видим, что сайт сгенерировал уникальный URL-адрес - об этом выводится текст с пояснением.
 
         # Мы посещаем эти URL-адреса - наши записи там.
+
+    def test_layout_and_styling(self):
+        '''тест макета и стилевого оформления'''
+        # пользователь открывает домашнюю страницу
+        self.browser.get(self.live_server_url)
+        self.browser.set_window_size(1024, 768)
+
+        # Он замечает, что поле ввода аккуратно центрировано
+        inputbox = self.browser.find_element(By.ID, 'id_new_item')
+        self.assertAlmostEqual(inputbox.location['x'] + inputbox.size['width'] / 2,
+                               510,
+                               delta=20)
+        
+        # Он начинает новый список и видит, что поле ввода там тоже
+        # аккуратно центрировано
+        inputbox.send_keys('testing')
+        inputbox.send_keys(Keys.ENTER)
+        self.wait_for_row_in_list_talbe('Вопрос: testing')
+        inputbox = self.browser.find_element(By.ID, 'id_new_item')
+        self.assertAlmostEqual(
+            inputbox.location['x'] + inputbox.size['width'] /2,
+            512,
+            delta=10
+        )
+
 
     def test_multiple_users_can_start_lists_at_different_urls(self):
         '''тест: многочисленные пользователи могут начать списки по разным url'''
