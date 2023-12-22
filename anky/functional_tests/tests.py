@@ -1,3 +1,4 @@
+import os
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium import webdriver
 import unittest
@@ -20,6 +21,9 @@ class NewVisitorTest(StaticLiveServerTestCase):
         options = ChromeOptions()
         service = ChromeService(executable_path=ChromeDriverManager().install())
         self.browser = webdriver.Chrome(service=service, options=options)
+        staging_server = os.environ.get('STAGING_SERVER')
+        if staging_server:
+            self.live_server_url = 'http://' + staging_server
 
     def tearDown(self):
         '''демонтаж'''
