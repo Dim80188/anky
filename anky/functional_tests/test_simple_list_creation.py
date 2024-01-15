@@ -1,50 +1,22 @@
-import os
-from django.contrib.staticfiles.testing import StaticLiveServerTestCase
+
 from selenium import webdriver
-import unittest
+
 from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.chrome.options import Options as ChromeOptions
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
-from selenium.common.exceptions import WebDriverException
-import time 
+
+from .base import FunctionalTest
 
 
-MAX_WAIT = 10
 
-class NewVisitorTest(StaticLiveServerTestCase):
+
+
+class NewVisitorTest(FunctionalTest):
     '''тест нового посетителя'''
-    
-    def setUp(self):
-        '''установка'''
-        options = ChromeOptions()
-        service = ChromeService(executable_path=ChromeDriverManager().install())
-        self.browser = webdriver.Chrome(service=service, options=options)
-        staging_server = os.environ.get('STAGING_SERVER')
-        if staging_server:
-            self.live_server_url = 'http://' + staging_server
-
-    def tearDown(self):
-        '''демонтаж'''
-        self.browser.quit()
-
-    def wait_for_row_in_list_talbe(self, row_text):
-        '''подтверждение строки в таблице списка'''
-        start_time = time.time()
-        while True:
-            try: 
-                table = self.browser.find_element(By.ID, 'id_list_table')
-                rows = table.find_elements(By.TAG_NAME, 'tr')
-                self.assertIn(row_text, [row.text for row in rows])
-                return 
-            except (AssertionError, WebDriverException) as e:
-                if time.time() - start_time > MAX_WAIT:
-                    raise e
-                time.sleep(0.5)
-
-    def test_can_start_a_list_and_retrieve_it_later(self):
-        '''тест: можно начать список и получить его позже'''
+    def test_can_start_a_list_for_one_user(self):
+        '''тест: можно начать список для одного пользователя'''
         # Открываем домашнюю страницу
         self.browser.get(self.live_server_url)
 
@@ -112,31 +84,6 @@ class NewVisitorTest(StaticLiveServerTestCase):
 
         # Мы посещаем эти URL-адреса - наши записи там.
 
-    def test_layout_and_styling(self):
-        '''тест макета и стилевого оформления'''
-        # пользователь открывает домашнюю страницу
-        self.browser.get(self.live_server_url)
-        self.browser.set_window_size(1024, 768)
-
-        # Он замечает, что поле ввода аккуратно центрировано
-        inputbox = self.browser.find_element(By.ID, 'id_new_item')
-        self.assertAlmostEqual(inputbox.location['x'] + inputbox.size['width'] / 2,
-                               510,
-                               delta=20)
-        
-        # Он начинает новый список и видит, что поле ввода там тоже
-        # аккуратно центрировано
-        inputbox.send_keys('testing')
-        inputbox.send_keys(Keys.ENTER)
-        self.wait_for_row_in_list_talbe('Вопрос: testing')
-        inputbox = self.browser.find_element(By.ID, 'id_new_item')
-        self.assertAlmostEqual(
-            inputbox.location['x'] + inputbox.size['width'] /2,
-            510,
-            delta=20
-        )
-
-
     def test_multiple_users_can_start_lists_at_different_urls(self):
         '''тест: многочисленные пользователи могут начать списки по разным url'''
         # 1-й пользователь начинает новый список
@@ -152,7 +99,7 @@ class NewVisitorTest(StaticLiveServerTestCase):
 
         # 2-й пользователь пришел на сайт
         # Мы используем новый сеанс браузера, чтобы никакая информация от 1-го
-        # пользователя не прошла через данные cookie 
+        # пользователя не прошла через данные cookie
         self.browser.quit()
         options = ChromeOptions()
         service = ChromeService(executable_path=ChromeDriverManager().install())
@@ -176,10 +123,7 @@ class NewVisitorTest(StaticLiveServerTestCase):
         self.assertNotEqual(second_user_list_url, first_user_list_url)
 
         # Нет ни следа от списка 1-го пользователя
-        page_text = self.browser.find_element(By.TAG_NAME, 'body').text 
+        page_text = self.browser.find_element(By.TAG_NAME, 'body').text
         self.assertNotIn('Дата начала 2-й мировой войны', page_text)
-        self.assertIn('Самый сложный язык', page_text) 
-        
+        self.assertIn('Самый сложный язык', page_text)
 
-if __name__ == '__main__':
-    unittest.main(warnings='ignore')     
